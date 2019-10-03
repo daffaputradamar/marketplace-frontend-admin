@@ -1,6 +1,9 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import { PrivateRoute } from './components/PrivateRoute'
 import { BrowserRouter, Route } from "react-router-dom";
+
+import jwt from 'jsonwebtoken'
+
 import Login from "./pages/Login/index";
 import Dashboard from './pages/Dashboard/index'
 
@@ -18,27 +21,13 @@ const routes = [
   },
 ]
 
-const context = React.createContext({
-  isLoggedIn: () => false,
-  token: "",
-  setToken: () => {},
-  user: null,
-  setUser: () => {},
-  logout: () => {}
-})
+export const UserContext = React.createContext()
+export const TOKEN_KEY = "authToken";
 
-const { Provider, Consumer } = context
+function App() {
+  const [token, setToken] = useState(localStorage.getItem(TOKEN_KEY) || '')
 
-const TOKEN_KEY = "authToken";
-
-class App extends Component {
-
-  state = {
-    token: "",
-    user: null
-  }
-
-  renderRoutes = () => {
+  function renderRoutes() {
     return routes.map(route =>
       route.private ? (
         <PrivateRoute
@@ -58,35 +47,42 @@ class App extends Component {
     )
   }
 
-  setToken = (token) => {
-    localStorage.setItem(TOKEN_KEY)
-    this.setState({ token })
+  function login(token) {
+    localStorage.setItem(TOKEN_KEY, token)
+    setToken(token)
   }
 
-  isLoggedIn = () => this.state.token !== ""
-
-  setUser = (user) => {
-    this.setState({ user })
+  function logout() {
+    localStorage.removeItem(TOKEN_KEY)
+    setToken('')
+    window.location.href = '/login'
   }
 
-  render() {
-    const providerValue = {
-      token: this.state.token,
-      setToken: this.setToken,
-      user: this.state.user,
-      setUser: this.setUser,
-      isLoggedIn: this.isLoggedIn
-    }
-    return (
-      <Provider value={providerValue}>
+  function isLoggedIn() {
+    return token !== ""
+  }
+
+  function getAdmin() {
+    return jwt.decode(token)
+  }
+
+  const providerValue = {
+    token,
+    setToken,
+    getAdmin,
+    isLoggedIn,
+    login,
+    logout
+  }
+
+  return (
+      <UserContext.Provider value={providerValue}>
         <BrowserRouter>
-          {this.renderRoutes()}
+          {renderRoutes()}
         </BrowserRouter>
-      </Provider>
-    )
-  }
+      </UserContext.Provider>
+  )
 }
 
-export { Consumer }
 export default App
 

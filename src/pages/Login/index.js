@@ -1,101 +1,86 @@
-import React, { Component } from 'react'
+import React, { useContext, useState } from 'react'
 import { Card, Header, Icon, Form, Input, Button } from "semantic-ui-react";
-import { Link } from "react-router-dom";
 import axios from 'axios'
-import { Consumer } from "../../App";
+import { UserContext } from "../../App";
 
-class Login extends Component {
+function Login(props) {
+    const context = useContext(UserContext)
 
-    state = {
+    const [input, setInput] = useState({
         username: "",
         password: ""
+    })
+
+    function changeValue(value, name) {
+        setInput({...input, [name]: value})
     }
 
-    changeValue = (value, name) => {
-        this.setState({[name]: value})
+    function resetValue() {
+        setInput({ password: "" })
     }
 
-    resetValue = () => {
-        this.setState({ password: "" })
-    }
-
-    login = () => {
+    function login() {
         axios
-          .post('http://localhost:8000/pengguna/login', this.state)
+          .post('http://localhost:8000/admin/login', input)
           .then(res => {
             if (res.data.success) {
-              this.context.setToken(res.data.token)
-              this.props.history.push('/')
+              context.login(res.data.token)
+              props.history.push('/')
             } else {
-              this.resetValue()
+              resetValue()
               alert('Username atau password anda salah')
             }
           })
       }
 
-    render() {
-        return (
-            <Consumer>
-                {
-                    (context) => {
-                        if (context.isLoggedIn()) {
-                            this.history.push('/')
-                        }
-                        return (
-                            <div style={styles.container}>
-                                <Card>
-                                    <Card.Content>
-                                        <Card.Header>
-                                        <Header icon textAlign="center">
-                                            <Icon name="user circle" />
-                                            <Header.Content>Masuk</Header.Content>
-                                        </Header>
-                                        </Card.Header>
-                            
-                                        <Form>
-                                        <Form.Field>
-                                            <Input
-                                            fluid
-                                            icon="user"
-                                            iconPosition="left"
-                                            placeholder="Username"
-                                            value={this.state.username}
-                                            onChange={event => this.changeValue(event.target.value, 'username')}
-                                            />
-                                        </Form.Field>
-                            
-                                        <Form.Field>
-                                            <Input
-                                            fluid
-                                            icon="lock"
-                                            iconPosition="left"
-                                            placeholder="Password"
-                                            type="password"
-                                            value={this.state.password}
-                                            onChange={event => this.changeValue(event.target.value, 'password')}
-                                            />
-                                        </Form.Field>
-                            
-                                        <Form.Field>
-                                            <Button positive fluid content="Masuk" onClick={this.login} />
-                                        </Form.Field>
-                            
-                                        <Form.Field>
-                                            <Link to="/daftar">
-                                            <Button basic color="orange" fluid content="Daftar" />
-                                            </Link>
-                                        </Form.Field>
-                                        </Form>
-                                    </Card.Content>
-                                    </Card>
-                            </div>
-                        )
-                    }
-                }
-            </Consumer>
+    if (context.isLoggedIn()) {
+        props.history.push('/')
+    }
+
+    return (
+            <div style={styles.container}>
+                <Card>
+                    <Card.Content>
+                        <Card.Header>
+                        <Header icon textAlign="center">
+                            <Icon name="user circle" />
+                            <Header.Content>Masuk</Header.Content>
+                        </Header>
+                        </Card.Header>
+            
+                        <Form>
+                        <Form.Field>
+                            <Input
+                            fluid
+                            icon="user"
+                            iconPosition="left"
+                            placeholder="Username"
+                            value={input.username}
+                            onChange={event => changeValue(event.target.value, 'username')}
+                            />
+                        </Form.Field>
+            
+                        <Form.Field>
+                            <Input
+                            fluid
+                            icon="lock"
+                            iconPosition="left"
+                            placeholder="Password"
+                            type="password"
+                            value={input.password}
+                            onChange={event => changeValue(event.target.value, 'password')}
+                            />
+                        </Form.Field>
+            
+                        <Form.Field>
+                            <Button positive fluid content="Masuk" onClick={login} />
+                        </Form.Field>
+                        </Form>
+                    </Card.Content>
+                    </Card>
+            </div>
         )
     }
-}
 
 const styles = {
     container: {

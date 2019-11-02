@@ -23,7 +23,7 @@ const routes = [
 
 export const UserContext = React.createContext();
 export const TOKEN_KEY = "authToken";
-export const ENDPOINT = "http://localhost:8000";
+export const HOSTNAME = "http://localhost:8000";
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem(TOKEN_KEY) || "");

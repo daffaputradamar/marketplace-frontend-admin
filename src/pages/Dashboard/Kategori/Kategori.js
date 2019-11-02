@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import KategoriTambah from "./KategoriTambah";
 import KategoriList from "./KategoriList";
-import { UserContext, ENDPOINT } from "../../../App";
+import { UserContext, HOSTNAME } from "../../../App";
 import axios from "axios";
 import { Segment, Dimmer, Loader, Image } from "semantic-ui-react";
 
@@ -13,7 +13,7 @@ function Kategori(props) {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`${ENDPOINT}/kategori`, {
+      .get(`${HOSTNAME}/kategori`, {
         headers: { Authorization: `Bearer ${context.token}` }
       })
       .then(res => {
@@ -27,7 +27,7 @@ function Kategori(props) {
       nama_kategori: kategori
     };
     axios
-      .post(`${ENDPOINT}/kategori`, newKategori, {
+      .post(`${HOSTNAME}/kategori`, newKategori, {
         headers: { Authorization: `Bearer ${context.token}` }
       })
       .then(res => {
@@ -38,7 +38,7 @@ function Kategori(props) {
 
   function deleteKategori(id) {
     console.log(id);
-    axios.delete(`${ENDPOINT}/kategori/${id}`).then(res => {
+    axios.delete(`${HOSTNAME}/kategori/${id}`).then(res => {
       const newKumpulanKategori = kumpulanKategori.filter(
         kategori => kategori.id_kategori != id
       );

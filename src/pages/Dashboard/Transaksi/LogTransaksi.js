@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import CardLogTransaksi from "./CardLogTransaksi";
 import axios from "axios";
 import { Header, Container } from "semantic-ui-react";
-import { UserContext, ENDPOINT } from "../../../App";
+import { UserContext, HOSTNAME } from "../../../App";
 
 function LogTransaksi(props) {
   const context = useContext(UserContext);
@@ -10,7 +10,7 @@ function LogTransaksi(props) {
 
   useEffect(() => {
     axios
-      .get(`${ENDPOINT}/transaksi/unconfirmed`, {
+      .get(`${HOSTNAME}/transaksi/unconfirmed`, {
         headers: { Authorization: `Bearer ${context.token}` }
       })
       .then(res => setKumpulanTransaksi(res.data));
@@ -19,14 +19,14 @@ function LogTransaksi(props) {
   function onConfirmClick(id) {
     axios
       .put(
-        `${ENDPOINT}/transaksi/${id}/konfirmasi`,
+        `${HOSTNAME}/transaksi/${id}/konfirmasi`,
         {},
         {
           headers: { Authorization: `Bearer ${context.token}` }
         }
       )
       .then(() =>
-        axios.get(`${ENDPOINT}/transaksi/unconfirmed`, {
+        axios.get(`${HOSTNAME}/transaksi/unconfirmed`, {
           headers: { Authorization: `Bearer ${context.token}` }
         })
       )

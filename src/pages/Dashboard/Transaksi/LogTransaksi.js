@@ -1,42 +1,48 @@
-import React, { useState, useEffect, useContext } from 'react'
-import CardLogTransaksi from './CardLogTransaksi'
-import axios from 'axios'
-import { Header, Container } from 'semantic-ui-react'
-import { UserContext } from '../../../App'
+import React, { useState, useEffect, useContext } from "react";
+import CardLogTransaksi from "./CardLogTransaksi";
+import axios from "axios";
+import { Header, Container } from "semantic-ui-react";
+import { UserContext, HOSTNAME } from "../../../App";
 
 function LogTransaksi(props) {
-  const context = useContext(UserContext)
-  const [kumpulanTransaksi, setKumpulanTransaksi] = useState([])
+  const context = useContext(UserContext);
+  const [kumpulanTransaksi, setKumpulanTransaksi] = useState([]);
 
   useEffect(() => {
     axios
-      .get('http://localhost:8000/transaksi/unconfirmed', {
-        headers: { Authorization: `Bearer ${context.token}` },
+      .get(`${HOSTNAME}/transaksi/unconfirmed`, {
+        headers: { Authorization: `Bearer ${context.token}` }
       })
-      .then(res => setKumpulanTransaksi(res.data))
-  }, [])
+      .then(res => setKumpulanTransaksi(res.data));
+  }, []);
 
   function onConfirmClick(id) {
     axios
-      .put(`http://localhost:8000/transaksi/${id}/konfirmasi`, {}, {
-        headers: { Authorization: `Bearer ${context.token}` },
-      })
-      .then(() => axios.get('http://localhost:8000/transaksi/unconfirmed', {
-        headers: { Authorization: `Bearer ${context.token}` },
-      }))
-      .then(res => setKumpulanTransaksi(res.data))
+      .put(
+        `${HOSTNAME}/transaksi/${id}/konfirmasi`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${context.token}` }
+        }
+      )
+      .then(() =>
+        axios.get(`${HOSTNAME}/transaksi/unconfirmed`, {
+          headers: { Authorization: `Bearer ${context.token}` }
+        })
+      )
+      .then(res => setKumpulanTransaksi(res.data));
   }
 
   return (
     <>
       {kumpulanTransaksi.length ? (
         kumpulanTransaksi.map(transaksi => {
-          const dateTime = new Date(transaksi.createdAt)
-          const date = dateTime.getDate()
-          const month = dateTime.getMonth() + 1
-          const year = dateTime.getFullYear()
-          const hour = dateTime.getHours()
-          const minutes = dateTime.getMinutes()
+          const dateTime = new Date(transaksi.createdAt);
+          const date = dateTime.getDate();
+          const month = dateTime.getMonth() + 1;
+          const year = dateTime.getFullYear();
+          const hour = dateTime.getHours();
+          const minutes = dateTime.getMinutes();
 
           return (
             <Container style={styles.marginCard} key={transaksi.id_transaksi}>
@@ -53,32 +59,32 @@ function LogTransaksi(props) {
                 onConfirmClick={onConfirmClick}
               />
             </Container>
-          )
+          );
         })
       ) : (
-        <Container style={styles.marginCard}> 
+        <Container style={styles.marginCard}>
           <Header as="h2">Transaksi Kosong</Header>
         </Container>
       )}
     </>
-  )
+  );
 }
 
-export default LogTransaksi
+export default LogTransaksi;
 
 const styles = {
   marginCard: {
-    marginTop: '15px',
+    marginTop: "15px"
   },
   linkPosition: {
-    position: 'relative',
-    left: '74%',
-    fontSize: '15px',
+    position: "relative",
+    left: "74%",
+    fontSize: "15px"
   },
   buttonPosition: {
-    position: 'relative',
-    top: '610%',
-    left: '76%',
-    transform: 'translate(-76%,-610%)',
-  },
-}
+    position: "relative",
+    top: "610%",
+    left: "76%",
+    transform: "translate(-76%,-610%)"
+  }
+};

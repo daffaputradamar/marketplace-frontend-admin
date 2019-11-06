@@ -1,31 +1,32 @@
-import React, { useState } from 'react'
-import { PrivateRoute } from './components/PrivateRoute'
+import React, { useState } from "react";
+import { PrivateRoute } from "./components/PrivateRoute";
 import { BrowserRouter, Route } from "react-router-dom";
 
-import jwt from 'jsonwebtoken'
+import jwt from "jsonwebtoken";
 
 import Login from "./pages/Login/index";
-import Dashboard from './pages/Dashboard/index'
+import Dashboard from "./pages/Dashboard/index";
 
 const routes = [
   {
-    path: '/',
+    path: "/",
     component: Dashboard,
     name: "home",
     private: true
   },
   {
-    path: '/login',
+    path: "/login",
     name: "masuk",
     component: Login
-  },
-]
+  }
+];
 
-export const UserContext = React.createContext()
+export const UserContext = React.createContext();
 export const TOKEN_KEY = "authToken";
+export const HOSTNAME = "http://localhost:8000";
 
 function App() {
-  const [token, setToken] = useState(localStorage.getItem(TOKEN_KEY) || '')
+  const [token, setToken] = useState(localStorage.getItem(TOKEN_KEY) || "");
 
   function renderRoutes() {
     return routes.map(route =>
@@ -43,27 +44,27 @@ function App() {
           component={route.component}
           key={route.name}
         />
-      ),
-    )
+      )
+    );
   }
 
   function login(token) {
-    localStorage.setItem(TOKEN_KEY, token)
-    setToken(token)
+    localStorage.setItem(TOKEN_KEY, token);
+    setToken(token);
   }
 
   function logout() {
-    localStorage.removeItem(TOKEN_KEY)
-    setToken('')
-    window.location.href = '/login'
+    localStorage.removeItem(TOKEN_KEY);
+    setToken("");
+    window.location.href = "/login";
   }
 
   function isLoggedIn() {
-    return token !== ""
+    return token !== "";
   }
 
   function getAdmin() {
-    return jwt.decode(token)
+    return jwt.decode(token);
   }
 
   const providerValue = {
@@ -73,16 +74,13 @@ function App() {
     isLoggedIn,
     login,
     logout
-  }
+  };
 
   return (
-      <UserContext.Provider value={providerValue}>
-        <BrowserRouter>
-          {renderRoutes()}
-        </BrowserRouter>
-      </UserContext.Provider>
-  )
+    <UserContext.Provider value={providerValue}>
+      <BrowserRouter>{renderRoutes()}</BrowserRouter>
+    </UserContext.Provider>
+  );
 }
 
-export default App
-
+export default App;

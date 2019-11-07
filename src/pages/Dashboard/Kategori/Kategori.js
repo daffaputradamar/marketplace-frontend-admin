@@ -46,24 +46,20 @@ function Kategori(props) {
     });
   }
 
-  return (
-    <React.Fragment>
-      {!loading ? (
-        <>
-          <KategoriTambah addKategori={addKategori} />
-          <KategoriList
-            deleteKategori={deleteKategori}
-            kumpulanKategori={kumpulanKategori}
-          />
-        </>
-      ) : (
-        <Segment>
-          <Dimmer active inverted>
-            <Loader inverted content="Loading" />
-          </Dimmer>
-        </Segment>
-      )}
-    </React.Fragment>
+  return !loading ? (
+    <>
+      <KategoriTambah addKategori={addKategori} />
+      <KategoriList
+        deleteKategori={deleteKategori}
+        kumpulanKategori={kumpulanKategori}
+      />
+    </>
+  ) : (
+    <Segment>
+      <Dimmer active inverted>
+        <Loader inverted content="Loading" />
+      </Dimmer>
+    </Segment>
   );
 }
 

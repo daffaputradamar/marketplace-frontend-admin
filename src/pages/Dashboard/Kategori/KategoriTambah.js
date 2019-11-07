@@ -10,7 +10,7 @@ function KategoriTambah(props) {
   }
 
   return (
-    <div style={styles.marginCard}>
+    <React.Fragment>
       <Header as="h2">Kategori</Header>
       <Grid>
         <Grid.Column width={12}>
@@ -29,7 +29,7 @@ function KategoriTambah(props) {
           </Button>
         </Grid.Column>
       </Grid>
-    </div>
+    </React.Fragment>
   );
 }
 

@@ -1,6 +1,13 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
-import { Menu, Button, Container, Grid, Segment } from "semantic-ui-react";
+import {
+  Menu,
+  Button,
+  Container,
+  Grid,
+  Segment,
+  Icon
+} from "semantic-ui-react";
 import { UserContext } from "../../App";
 import LogTransaksi from "./Transaksi/LogTransaksi";
 import Kategori from "./Kategori/Kategori";
@@ -8,6 +15,7 @@ import Penarikan from "./Penarikan/Penarikan";
 import KonfirmasiPenarikan from "./Penarikan/KonfirmasiPenarikan";
 import Anggota from "./Anggota/Anggota";
 import KonfirmasiAnggota from "./Anggota/KonfirmasiAnggota";
+import KonfirmasiIklan from "./Iklan/KonfirmasiIklan";
 
 function Dashboard() {
   const context = useContext(UserContext);
@@ -17,14 +25,20 @@ function Dashboard() {
     penarikan: "penarikan",
     konfirmasiPenarikan: "konfirmasiPenarikan",
     anggota: "anggota",
-    konfirmasiAnggota: "konfirmasiAnggota"
+    konfirmasiAnggota: "konfirmasiAnggota",
+    konfirmasiIklan: "konfirmasiIklan",
+    iklan: "iklan"
   };
 
-  const [activeItem, setActiveItem] = useState(listActiveItem.anggota);
+  const [activeItem, setActiveItem] = useState(listActiveItem.kategori);
 
   return (
     <React.Fragment>
       <Menu>
+        <Menu.Item>
+          <Icon name="user outline" />
+          &nbsp; Admin
+        </Menu.Item>
         <Menu.Menu position="right">
           <Menu.Item>
             <Button onClick={context.logout}>Logout</Button>
@@ -109,6 +123,27 @@ function Dashboard() {
                   />
                 </Menu.Menu>
               </Menu.Item>
+              <Menu.Item disabled>
+                <Menu.Header>Iklan</Menu.Header>
+                <Menu.Menu>
+                  <Menu.Item
+                    disabled
+                    name="Konfirmasi iklan"
+                    active={activeItem === listActiveItem.konfirmasiIklan}
+                    onClick={event =>
+                      setActiveItem(listActiveItem.konfirmasiIklan)
+                    }
+                  />
+                </Menu.Menu>
+                <Menu.Menu>
+                  <Menu.Item
+                    disabled
+                    name="Daftar iklan"
+                    active={activeItem === listActiveItem.iklan}
+                    onClick={event => setActiveItem(listActiveItem.iklan)}
+                  />
+                </Menu.Menu>
+              </Menu.Item>
             </Menu>
           </Grid.Column>
           <Grid.Column stretched width={12}>
@@ -121,6 +156,9 @@ function Dashboard() {
             {activeItem === listActiveItem.penarikan && <Penarikan />}
             {activeItem === listActiveItem.konfirmasiPenarikan && (
               <KonfirmasiPenarikan />
+            )}
+            {activeItem === listActiveItem.konfirmasiIklan && (
+              <KonfirmasiIklan />
             )}
           </Grid.Column>
         </Grid>

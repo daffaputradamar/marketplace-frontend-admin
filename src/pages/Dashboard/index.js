@@ -5,7 +5,9 @@ import {
   Button,
   Container,
   Grid,
-  Segment,
+  List,
+  Image,
+  Divider,
   Icon
 } from "semantic-ui-react";
 import { UserContext } from "../../App";
@@ -163,8 +165,34 @@ function Dashboard() {
           </Grid.Column>
         </Grid>
       </Container>
+      <Divider style={styles.topFooter}/>
+             <Container style={{marginTop:"45px",marginBottom:"10px"}}>
+                 <Grid>
+                     <Grid.Row>
+                         <Grid.Column width={5}>
+                            
+                         </Grid.Column>
+                         <Grid.Column width={8}>
+                            
+                         </Grid.Column>
+                         <Grid.Column width={3}>
+                            <Image src='https://www.nomadfoods.com/wp-content/uploads/2018/08/placeholder-1-e1533569576673-960x960.png' size='mini' floated='left' />
+                            <small>© 2019, PT. Marketplace</small>
+                         </Grid.Column>
+                     </Grid.Row>
+                 </Grid>
+                 </Container>
     </React.Fragment>
   );
 }
 
 export default Dashboard;
+
+const styles = {
+  topFooter :{
+      marginTop : '250px'
+  },
+  marginItem:{
+      marginBottom : '10px'
+  }
+}

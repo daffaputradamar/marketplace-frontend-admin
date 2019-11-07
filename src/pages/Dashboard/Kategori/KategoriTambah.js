@@ -11,8 +11,8 @@ function KategoriTambah(props) {
 
   return (
     <React.Fragment>
-      <Header as="h2">Kategori</Header>
-      <Grid>
+      <Header as="h2" style={{marginBottom:-250}}>Kategori</Header>
+      <Grid style={{marginBottom:-250}}>
         <Grid.Column width={12}>
           <Form.Field>
             <Input
@@ -32,22 +32,5 @@ function KategoriTambah(props) {
     </React.Fragment>
   );
 }
-
-const styles = {
-  marginCard: {
-    marginTop: "15px"
-  },
-  linkPosition: {
-    position: "relative",
-    left: "74%",
-    fontSize: "15px"
-  },
-  buttonPosition: {
-    position: "relative",
-    top: "610%",
-    left: "76%",
-    transform: "translate(-76%,-610%)"
-  }
-};
 
 export default KategoriTambah;

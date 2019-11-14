@@ -104,7 +104,7 @@ function Dashboard() {
                   <Menu.Item name="Iuran Sukarela" disabled />
                 </Menu.Menu>
               </Menu.Item>
-              <Menu.Item disabled>
+              <Menu.Item>
                 <Menu.Header>Penarikan</Menu.Header>
                 <Menu.Menu>
                   <Menu.Item
@@ -113,7 +113,7 @@ function Dashboard() {
                     onClick={event =>
                       setActiveItem(listActiveItem.konfirmasiPenarikan)
                     }
-                    disabled
+                    
                   />
                 </Menu.Menu>
                 <Menu.Menu>
